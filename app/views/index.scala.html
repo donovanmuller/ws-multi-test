@@ -1,0 +1,35 @@
+@main("Welcome to webSocket MaYhEm!") {
+
+    <a id="ws-url" href="@routes.Application.echo("window-uuid").webSocketURL()" style="display: none;">WS URL</a>
+    <h1></h1>
+    <button>Say Hello</button>
+    <a href="@routes.Application.reset()">Reset</a>
+    <div id="messages"></div>
+
+    <script>
+        var uuid = guid();
+        $('h1').html(uuid);
+        var url = $('#ws-url').attr('href').replace('window-uuid', uuid);
+        var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
+        var feedSocket = new WS(url);
+
+        feedSocket.onmessage = function(e) {
+        console.log('Got message:');
+        console.log(e);
+            $('#messages').append('<p>' + e.data + '</p>');
+        };
+
+        $('button').click(function() {
+            $.get('@routes.Application.hello()', { message: "Hello!" });
+        });
+
+        function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+        }
+
+        function guid() {
+            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+        }
+    </script>
+}
