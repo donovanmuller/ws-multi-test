@@ -38,9 +38,7 @@ public class Application extends Controller {
     }
 
     public static WebSocket<String> echo(final String uuid) {
-        WebSocket<String> socket = new TestSocket(uuid);
-
-        return socket;
+        return new TestSocket(uuid);
     }
 
     static class TestSocket extends WebSocket<String> {
